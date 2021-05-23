@@ -44,3 +44,5 @@ bool RutTien(ATM& x, TienATM& n);
 void DocLichSuGiaoDich(ATM x);
 void DoiMatKhau(ATM& x, ATM ds[], int n);
 void GhiLaiDachSachKhachHang(ATM ds[], int n);
+void ChuyenTien(ATM& X, ATM ds[], int sl);
+void GhiLichSuGiaoDichChoChuyenTien(ATM x, ATM y, double money);

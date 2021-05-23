@@ -1,0 +1,18 @@
+Thoi gian GD: 0:25:35 24/5/2021
+So tien: +800000 VND
+Quy khach nap 800000VND vao tai khoan cua minh
+Thoi gian GD: 0:26:19 24/5/2021
+So tien: -110000VND
+Quy khach vua chuyen 110000 vao tai khoan co so ID 2002 phi dich vu 10000
+Thoi gian GD: 0:29:1 24/5/2021
+So tien: -700000VND
+Quy khach vua chuyen 700000 vao tai khoan co so ID 2002 phi dich vu 10000
+Thoi gian GD: 0:30:26 24/5/2021
+So tien: + 690000VND
+Quy khach vua nhan duoc 690000 tu tai khoan co so ID 2002 phi dich vu 10000
+Thoi gian GD: 0:37:16 24/5/2021
+So tien: 100000VND
+Quy khach vua chuyen -100000 vao tai khoan co so ID 2002 phi dich vu 10000
+Thoi gian GD: 0:39:53 24/5/2021
+So tien: -100000VND
+Quy khach vua chuyen 100000 vao tai khoan co so ID 2002 phi dich vu 10000

@@ -238,6 +238,12 @@ void LuaChon(ATM& x, TienATM& n, ATM ds[], int sl)
 			system("pause");
 			break;
 		}
+		case 9:
+		{
+			ChuyenTien(x, ds, sl);
+			system("pause");
+			break;
+		}
 		}
 
 	} while (kt);
@@ -288,9 +294,15 @@ void GhiLichSuGiaoDich(ATM x, int tien)
 	fileout << "Thoi gian GD: " << tg.tm_hour << ":" << 1 + tg.tm_min << ":" << 1 + tg.tm_sec;
 	fileout << " " << tg.tm_mday << "/" << 1 + tg.tm_mon << "/" << 1900 + tg.tm_year;
 	if (tien > 0)
+	{
 		fileout << "\nSo tien: +" << tien << " VND\n";
+		fileout << "Quy khach nap " << tien << "VND vao tai khoan cua minh" << endl;
+	}
 	if (tien < 0)
+	{
 		fileout << "\nSo tien: " << tien << " VND\n";
+		fileout << "Quy khach rut " << -tien << "VND khoi tai khoan cua minh" << endl;
+	}
 	fileout.close();
 }
 ATM GuiTien(ATM& x, TienATM& n)
@@ -423,7 +435,7 @@ void DocLichSuGiaoDich(ATM x)
 	filein.open("LSGD " + x.ID + ".txt", ios::in);
 	if (filein.fail())
 	{
-		cout << "Chua co lich su giao dich";
+		cout << "\nChua co lich su giao dich\n";
 		return;
 	}
 	while (!filein.eof())
@@ -458,6 +470,7 @@ void DoiMatKhau(ATM& x, ATM ds[], int n)
 		}
 	}
 	GhiLaiDachSachKhachHang(ds, n);
+	cout << "\nQuy khach da thay doi mat khau thanh cong!\n";
 }
 void GhiLaiDachSachKhachHang(ATM ds[], int n)
 {
@@ -468,4 +481,106 @@ void GhiLaiDachSachKhachHang(ATM ds[], int n)
 		fileout << ds[i].ID << "," << ds[i].pass << "," << ds[i].PIN << "," << ds[i].Money << endl;
 	}
 	fileout.close();
+}
+void ChuyenTien(ATM& x, ATM ds[], int sl)
+{
+	DocTien(x);
+	ATM y;
+	int i = 0;
+	do
+	{
+		if(i==0) cout << "Nhap so ID ban muon chuyen: ";
+		if (i > 0) cout << "ID nay khong ton tai! Moi quy khach nhap lai: ";
+		cin >> y.ID;
+		i++;
+	} while (!CheckID(ds, sl, y.ID));
+	for (int i = 0; i < sl; i++)
+	{
+		if (ds[i].ID == y.ID)
+		{
+			y = ds[i];
+		}
+	}
+	DocTien(y);
+	i = 0;
+	double money=0;
+	bool kt = true;
+	do
+	{
+		if(i==0)
+		cout << "Nhap so tien muon chuyen: ";
+		if (i > 0)
+		{
+			if(money>10000)
+			cout << "Tai khoan cua quy khach khong du tien de chuyen so tien nay. Moi quy khach nhap lai so tien!\n";
+			cout << "Nhap : ";
+		}
+		cin >> money;
+		cout << "\nChon hinh thuc chuyen phi dich vu\n1.Nguoi gui / 2.Nguoi nhan\n";
+		int lc;
+		cin >> lc;
+		switch (lc )
+		{
+		case 1:
+		{
+			money += 10000;
+			break;
+		}
+		case 2:
+		{
+			kt = false;
+			break;
+		}
+		}
+		i++;
+	} while (money > x.Money || money <= 10000);
+	if (kt)
+	{
+		x.Money -= money;
+		GhiLichSuGiaoDichChoChuyenTien(x, y, -money);
+		money -= 10000;
+		y.Money += money;
+		GhiLichSuGiaoDichChoChuyenTien(x, y, money);
+	}
+	else
+	{
+		x.Money -= money;
+		GhiLichSuGiaoDichChoChuyenTien(x, y, -money);
+		money -= 10000;
+		y.Money = y.Money + money;
+		GhiLichSuGiaoDichChoChuyenTien(x, y, money);
+	}
+	GhiTien(x);
+	GhiTien(y);
+	cout << "\nQuy khach da chuyen tien thanh cong!\n";
+}
+void GhiLichSuGiaoDichChoChuyenTien(ATM x, ATM y, double money)
+{
+	if (money < 0)
+	{
+		ofstream fileout;
+		fileout.open("LSGD " + x.ID + ".txt", ios::app);
+		time_t now = time(0);
+		tm tg;
+		localtime_s(&tg, &now);
+		fileout << "Thoi gian GD: " << tg.tm_hour << ":" << 1 + tg.tm_min << ":" << 1 + tg.tm_sec;
+		fileout << " " << tg.tm_mday << "/" << 1 + tg.tm_mon << "/" << 1900 + tg.tm_year;
+		fileout << "\nSo tien: " << money << "VND\n";
+		fileout << "Quy khach vua chuyen " << -money << " vao tai khoan co so ID " << y.ID << " phi dich vu 10000" << endl;
+		fileout.close();
+	}
+	if (money > 0)
+	{
+		ofstream fileout;
+		time_t now = time(0);
+		tm tg;
+		localtime_s(&tg, &now);
+		fileout.open("LSGD " + y.ID + ".txt", ios::app);
+		fileout << "Thoi gian GD: " << tg.tm_hour << ":" << 1 + tg.tm_min << ":" << 1 + tg.tm_sec;
+		fileout << " " << tg.tm_mday << "/" << 1 + tg.tm_mon << "/" << 1900 + tg.tm_year;
+		fileout << "\nSo tien: " << "+ " << money << "VND\n";
+		fileout << "Quy khach vua nhan duoc " << money << " tu tai khoan co so ID " << x.ID << " phi dich vu 10000" << endl;
+		fileout.close();
+	}
+	
 }

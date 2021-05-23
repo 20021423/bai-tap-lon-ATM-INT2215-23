@@ -1,0 +1,15 @@
+Thoi gian GD: 0:26:19 24/5/2021
+So tien: + 110000VND
+Quy khach vua nhan duoc 110000 tu tai khoan co so ID 20021423 phi dich vu 10000
+Thoi gian GD: 0:29:1 24/5/2021
+So tien: + 700000VND
+Quy khach vua nhan duoc 700000 tu tai khoan co so ID 20021423 phi dich vu 10000
+Thoi gian GD: 0:30:26 24/5/2021
+So tien: -690000VND
+Quy khach vua chuyen 690000 vao tai khoan co so ID 20021423 phi dich vu 10000
+Thoi gian GD: 0:37:16 24/5/2021
+So tien: + 90000VND
+Quy khach vua nhan duoc 90000 tu tai khoan co so ID 20021423 phi dich vu 10000
+Thoi gian GD: 0:39:53 24/5/2021
+So tien: + 90000VND
+Quy khach vua nhan duoc 90000 tu tai khoan co so ID 20021423 phi dich vu 10000
