@@ -576,7 +576,7 @@ void DoiMatKhau(ATM& x, ATM ds[], int n)
 	string pass1, pass2;
 	do
 	{
-		cout << "Nhap mat khau noi khac voi mat khau cu va tuan thu nguyen tac dat mat khau\n(toi thieu 8 ki tu trong do co it nhat 1 ki tu so, 1 ki tu chu cai va 1 ki tu dac biet)\n";
+		cout << "\nNhap mat khau noi khac voi mat khau cu va tuan thu nguyen tac dat mat khau\n(toi thieu 8 ki tu trong do co it nhat 1 ki tu so, 1 ki tu chu cai va 1 ki tu dac biet)\n";
 		cout << "1. Hien thi/ 2.An\n";
 		int lc;
 		cout << "Nhap lua chon: ";
