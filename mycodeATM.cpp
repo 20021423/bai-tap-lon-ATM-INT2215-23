@@ -111,6 +111,7 @@ void DangKy(ATM ds[], int& n)
 		{
 			cout << "\n1. Hien thi/ 2.An\n";
 			int lc;
+			cout << "Nhap lua chon: ";
 			cin >> lc;
 			switch (lc)
 			{
@@ -628,10 +629,10 @@ void ChuyenTien(ATM& x, ATM ds[], int sl)
 	do
 	{
 		if(i==0) cout << "Nhap so ID ban muon chuyen: ";
-		if (i > 0) cout << "ID nay khong ton tai! Moi quy khach nhap lai: ";
+		if (i > 0) cout << "ID nay khong ton tai hoac ID nay la tai khoan cua chinh ban! Moi quy khach nhap lai: ";
 		cin >> y.ID;
 		i++;
-	} while (!CheckID(ds, sl, y.ID));
+	} while (!CheckID(ds, sl, y.ID) || y.ID==x.ID);
 	for (int i = 0; i < sl; i++)
 	{
 		if (ds[i].ID == y.ID)
@@ -688,6 +689,18 @@ void ChuyenTien(ATM& x, ATM ds[], int sl)
 		y.Money = y.Money + money;
 		GhiLichSuGiaoDichChoChuyenTien(x, y, money);
 	}
+	for (int i = 0; i < sl; i++)
+	{
+		if (ds[i].ID == x.ID)
+		{
+			ds[i] = x;
+		}
+		if (ds[i].ID == y.ID)
+		{
+			ds[i] = y;
+		}
+	}
+	GhiLaiDachSachKhachHang(ds, sl);
 	GhiTien(x);
 	GhiTien(y);
 	cout << "\nQuy khach da chuyen tien thanh cong!\n";
