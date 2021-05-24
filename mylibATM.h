@@ -4,6 +4,7 @@
 #include <fstream>
 #include <Windows.h>
 #include <ctime>
+#include <conio.h>
 #define MAX 100
 
 using namespace std;
@@ -25,6 +26,8 @@ struct TienATM
 	int n500k = 0;
 };
 void menu(ATM ds[], int& n, TienATM& p);
+bool DangKyMatKhau(string s);
+bool DangKyPin(string s);
 void DangKy(ATM ds[], int& n);
 bool CheckID(ATM ds[], int n, string id);
 int DocFile(ATM ds[], int& n);
@@ -46,3 +49,4 @@ void DoiMatKhau(ATM& x, ATM ds[], int n);
 void GhiLaiDachSachKhachHang(ATM ds[], int n);
 void ChuyenTien(ATM& X, ATM ds[], int sl);
 void GhiLichSuGiaoDichChoChuyenTien(ATM x, ATM y, double money);
+string CheDoNhapAn();

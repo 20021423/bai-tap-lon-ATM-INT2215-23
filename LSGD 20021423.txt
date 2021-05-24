@@ -16,3 +16,6 @@ Quy khach vua chuyen -100000 vao tai khoan co so ID 2002 phi dich vu 10000
 Thoi gian GD: 0:39:53 24/5/2021
 So tien: -100000VND
 Quy khach vua chuyen 100000 vao tai khoan co so ID 2002 phi dich vu 10000
+Thoi gian GD: 1:3:20 24/5/2021
+So tien: +50000 VND
+Quy khach nap 50000VND vao tai khoan cua minh
