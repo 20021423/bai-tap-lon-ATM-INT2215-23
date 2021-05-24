@@ -281,14 +281,14 @@ void LuaChon(ATM& x, TienATM& n, ATM ds[], int sl)
 		case 3:
 		{
 			DocFileTienTrongATM(n);
-			GuiTien(x, n);
+			GuiTien(x, n, ds, sl);
 			system("pause");
 			break;
 		}
 		case 4:
 		{
 			DocFileTienTrongATM(n);
-			RutTien(x, n);
+			RutTien(x, n,ds,sl);
 			system("pause");
 			break;
 		}
@@ -390,7 +390,7 @@ void GhiLichSuGiaoDich(ATM x, int tien)
 	}
 	fileout.close();
 }
-ATM GuiTien(ATM& x, TienATM& n)
+ATM GuiTien(ATM& x, TienATM& n, ATM ds[], int sl)
 {
 	int menhgia;
 	do {
@@ -418,6 +418,14 @@ ATM GuiTien(ATM& x, TienATM& n)
 	x.Money += (menhgia * soto);
 	GhiTien(x);
 	GhiLichSuGiaoDich(x, menhgia * soto);
+	for (int i = 0; i < sl; i++)
+	{
+		if (ds[i].ID == x.ID)
+		{
+			ds[i] = x;
+		}
+	}
+	GhiLaiDachSachKhachHang(ds, sl);
 	cout << "\nQuy khach da thanh cong nap " << menhgia * soto << " vao tai khoan cua minh\n";
 	return x;
 }
@@ -428,7 +436,7 @@ void GhiTienTrongATM(TienATM& n)
 	fileout << n.n500k << " " << n.n200k << " " << n.n100k << " " << n.n50k << " " << n.n20k << " " << n.n10k;
 	fileout.close();
 }
-bool RutTien(ATM& x, TienATM& n)
+bool RutTien(ATM& x, TienATM& n, ATM ds[], int sl)
 {
 	int tien;
 	cout << "Nhap so tien muon rut: ";
@@ -506,6 +514,15 @@ bool RutTien(ATM& x, TienATM& n)
 		cout << endl;
 		GhiTien(x);
 		GhiTienTrongATM(n);
+		for (int i = 0; i < sl; i++)
+		{
+			if (ds[i].ID == x.ID)
+			{
+				ds[i] = x;
+				break;
+			}
+		}
+		GhiLaiDachSachKhachHang(ds, sl);
 		return true;
 	}
 	else
