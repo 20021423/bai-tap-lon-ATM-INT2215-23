@@ -111,27 +111,30 @@ void DangKy(ATM ds[], int& n)
 		{
 			cout << "\n1. Hien thi/ 2.An\n";
 			int lc;
-			cout << "Nhap lua chon: ";
-			cin >> lc;
-			switch (lc)
+			do
 			{
-			case 1:
-			{
-				cout << "\nNhap pass: ";
-				cin >> x.pass;
-				cout << "\nXac nhan lai pass: ";
-				cin >> pass2;
-				break;
-			}
-			case 2:
-			{
-				cout << "\nNhap pass: ";
-				x.pass = CheDoNhapAn();
-				cout << "\nXac nhan lai pass: ";
-				pass2 = CheDoNhapAn();
-				break;
-			}
-			}
+				cout << "Nhap lua chon: ";
+				cin >> lc;
+				switch (lc)
+				{
+				case 1:
+				{
+					cout << "\nNhap pass: ";
+					cin >> x.pass;
+					cout << "\nXac nhan lai pass: ";
+					cin >> pass2;
+					break;
+				}
+				case 2:
+				{
+					cout << "\nNhap pass: ";
+					x.pass = CheDoNhapAn();
+					cout << "\nXac nhan lai pass: ";
+					pass2 = CheDoNhapAn();
+					break;
+				}
+				}
+			} while (lc != 1 && lc != 2);
 		} while (x.pass != pass2 || !DangKyMatKhau(x.pass));
 		cout << "\nNhap ma PIN(toi thieu co 4 chu so va toi da la 6 chu so): ";
 		do
@@ -194,45 +197,63 @@ string CheDoNhapAn()
 	char c = _getch();
 	while (c != 13) // 13 la phim enter
 	{
-		pass += c;
-		cout << "*";
+		if (c != 8)
+		{
+			pass += c;
+			cout << "*";
+		}
+		else
+		{
+			pass.pop_back();
+			cout << "\b \b";
+		}
 		c = _getch();
 	}
 	return pass;
 }
-bool DangNhap(ATM ds[], int n, ATM& x)
+bool DangNhap(ATM ds[], int &n, ATM& x)
 {
-	cout << "\nMoi quy khach nhap ID, pass: \n";
 	int i = 0;
+	int j = 0;
 	do
 	{
+		system("cls");
+		cout << "\n\n=====================Moi quy khach nhap ID, pass===========================\n\n";
 		cout << "Nhap ID: ";
 		cin >> x.ID;
 		cout << "1. Hien thi mat khau \n2. An mat khau\n";
 		int lc;
+		do{
 		cout << "Nhap lc: ";
 		cin >> lc;
-		cout << "\nNhap pass: ";
+		} while (lc != 1 && lc != 2);
 		switch (lc)
 		{
 		case 1:
 		{
-			
+			cout << "\nNhap pass: ";
 			cin >> x.pass;
 			break;
 		}
 		case 2:
 		{
+			cout << "\nNhap pass: ";
 			x.pass = CheDoNhapAn();
 			break;
 		}
-		}
+		}	
 		i++;
 		if (i > 5)
 		{
+			if (i > 7)
+			{
+				cout << "\nQua 7 lan chung toi se tam khoa tai khoan\nDe mo tai khoan quy khach can lien he voi admin de lam thu tuc mo\n";
+				XoaTaikKhoan(ds, n, x);
+				GhiLaiDachSachKhachHang(ds, n);
+				return false;
+			}
 			cout << "\nBan da nhap sai id, pass qua 5 lan, chung toi se tam thoi khoa tai khoan trong 30s!\n";
 			Sleep(30000);
-			return false;
 		}
 	} while (!CheckPass(ds, n, x));
 	for (int j = 0; j < n; j++)
@@ -274,6 +295,7 @@ void LuaChon(ATM& x, TienATM& n, ATM ds[], int sl)
 		cout << "7. Xem lich su giao dich" << endl;
 		cout << "8. Doi mat khau" << endl;
 		cout << "9. Chuyen tien" << endl;
+		cout << "10. Chuc nang cua admin" << endl;
 		int lc;
 		cout << "Nhap lua chon: ";
 		cin >> lc;
@@ -329,6 +351,20 @@ void LuaChon(ATM& x, TienATM& n, ATM ds[], int sl)
 			ChuyenTien(x, ds, sl);
 			system("pause");
 			break;
+		}
+		case 10:
+		{
+			if (TaiKhoanAdmin(ds,sl, x))
+			{
+				ChucNangAdmin(ds, sl, x, n);
+				break;
+			}
+			else
+			{
+				cout << "\nChuc nang nay danh rieng cho admin. Xin loi quy khach khong the su dung duoc!\n";
+				break;
+			}
+			
 		}
 		}
 
@@ -733,5 +769,268 @@ void GhiLichSuGiaoDichChoChuyenTien(ATM x, ATM y, double money)
 		fileout << "Quy khach vua nhan duoc " << money << " tu tai khoan co so ID " << x.ID << " phi dich vu 10000" << endl;
 		fileout.close();
 	}
-	
+}
+void XoaTaikKhoan(ATM ds[], int& n, ATM x)
+{
+	int index = -1;
+	for (int i = 0; i < n; i++)
+	{
+		if (ds[i].ID == x.ID)
+		{
+			ds[i] = x;
+			x = ds[i];
+			index = i;
+		}
+	}
+	DocTien(x);
+	GhiTien(x);
+	if (index >= 0)
+	{
+		for (int i = index; i < n; i++)
+		{
+			ds[i] = ds[i + 1];
+		}
+		n--;
+	}
+}
+bool TaiKhoanAdmin(ATM ds[], int n, ATM& ad)
+{
+	ifstream filein;
+	filein.open("TaiKhoanAdmin.txt", ios::in);
+	if (filein.fail())
+	{
+		cout << "Khong mo dc file";
+		return false;
+	}
+	ATM admin[MAX];
+	int j = 0;
+	while (!filein.eof())
+	{
+		ATM x;
+		getline(filein, x.ID);
+		admin[j] = x;
+		j++;
+	}
+	filein.close();
+	for (int i = 0; i < j; i++)
+	{
+		if (ad.ID == admin[i].ID)
+		{
+			ad = admin[i];
+			return true;
+		}
+	}
+	return false;
+}
+void ChucNangAdmin(ATM ds[], int n, ATM& x, TienATM &p)
+{
+	bool kt = true;
+	do
+	{
+		system("cls");
+		cout << "1. Mo khoa tai khoan" << endl;
+		cout << "2. Xem cu the trong may ATM co bao nhieu tien" << endl;
+		cout << "3. Xem lich su giao dich cua 1 ID bat ki" << endl;
+		cout << "4. Xem danh sach cac tai khoan hien co" << endl;
+		cout << "5. Them tien cho ATM" << endl;
+		cout << "6. Dang ky tai khoan moi" << endl;
+		cout << "0. Thoat" << endl;
+		int lc;
+		cout << "Nhap lc: ";
+		cin >> lc;
+		switch (lc)
+		{
+		case 1:
+		{
+			MoTaiKhoan(ds, n);
+			system("pause");
+			break;
+		}
+		case 0:
+		{
+			kt = false;
+			break;
+		}
+		case 2:
+		{
+			DocFileTienTrongATM(p);
+			cout << "Trong ATM co: " << endl;
+			cout << p.n500k << " to 500k" << endl;
+			cout << p.n200k<< " to 200k" << endl;
+			cout << p.n100k << " to 100k" << endl;
+			cout << p.n50k << " to 50k" << endl;
+			cout << p.n20k << " to 20k" << endl;
+			cout << p.n10k << " to 10k" << endl;
+			system("pause");
+			break;
+		}
+		case 3:
+		{
+			XemLichSuGiaoDichCuaIDBatKi(ds, n);
+			system("pause");
+			break;
+		}
+		case 4:
+		{
+			XemDanhSachCacTaiKhoan(ds, n);
+			system("pause");
+			break;
+		}
+		case 5:
+		{
+			ThemTienChoATM(p);
+			system("pause");
+			break;
+		}
+		case 6:
+		{
+			DangKy(ds, n);
+			system("pause");
+			break;
+		}
+		}
+	} while (kt);
+}
+bool CheckTaiKhoanBiKhoa(ATM x)
+{
+	ifstream filein;
+	filein.open(x.ID + ".txt", ios::in);
+	if (filein.fail()) return false;
+	filein.close();
+	return true;
+}
+void MoTaiKhoan(ATM ds[], int& n)
+{
+	DocFile(ds, n);
+	ATM x;
+	int i = 1;
+	do
+	{
+		if (i > 4)
+		{
+			cout << "Bam 0 de thoat chuc nang nay!\nBam bat ki de tiep tuc!\n";
+			string lc;
+			cin >> lc;
+			if (lc == "0")
+			{
+				return;
+			}
+		}
+		if (i > 1) cout << "\nDa nhap sai ID hoac ID chua tung dang ky\n";
+		cout << "\nNhap ID: ";
+		cin >> x.ID;
+		i++;
+	} while (CheckID(ds, n, x.ID) || !CheckTaiKhoanBiKhoa(x));
+	cout << "\npass (toi thieu co 8 ki tu trong do co it nhat 1 ki tu so, 1 ki tu chu va 1 ki tu dac biet : ";
+	string pass2, PIN2;
+	do
+	{
+		cout << "\n1. Hien thi/ 2.An\n";
+		int lc;
+		do
+		{
+			cout << "Nhap lua chon: ";
+			cin >> lc;
+			switch (lc)
+			{
+			case 1:
+			{
+				cout << "\nNhap pass: ";
+				cin >> x.pass;
+				cout << "\nXac nhan lai pass: ";
+				cin >> pass2;
+				break;
+			}
+			case 2:
+			{
+				cout << "\nNhap pass: ";
+				x.pass = CheDoNhapAn();
+				cout << "\nXac nhan lai pass: ";
+				pass2 = CheDoNhapAn();
+				break;
+			}
+			}
+		} while(lc!=1 && lc!=2);
+	} while (x.pass != pass2 || !DangKyMatKhau(x.pass));
+	cout << "\nNhap ma PIN(toi thieu co 4 chu so va toi da la 6 chu so): ";
+	do
+	{
+		cout << "\nNhap pin: ";
+		cin >> x.PIN;
+		cout << "\nXac nhan lai ma PIN: ";
+		cin >> PIN2;
+	} while (x.PIN != PIN2 || !DangKyPin(x.PIN));
+	cout << "\nda mo khoa thanh cong\n";
+	DocTien(x);
+	ds[n] = x;
+	n++;
+	GhiThongTinKhachHang(x);
+}
+void XemLichSuGiaoDichCuaIDBatKi(ATM ds[], int n)
+{
+	ATM x;
+	int i = 0;
+	do
+	{
+		if (i > 4)
+		{
+			cout << "\nBam 0 de thoat khoi chuc nang nay!\n";
+			cin >> x.ID;
+			if (x.ID == "0")
+			{
+				return;
+			}
+		}
+		cout << "\nNhap ID ban muon xem lich su giao dich: ";
+		cin >> x.ID;
+		i++;
+	} while (!CheckID(ds, n, x.ID));
+	cout << endl;
+	DocLichSuGiaoDich(x);
+}
+
+void XemDanhSachCacTaiKhoan(ATM ds[], int n)
+{
+	string s;
+	int i = 0;
+	cout << "Muon xem het thong tin ID, mat khau, ma pin, so tien du can phai co ma sieu dac biet!\n";
+	do
+	{
+		if (i > 5)
+		{
+			cout << "Ban da nhap sai qua 5 lan ma dac biet, ban chi co the xem ID duoc thoi!\n";
+			cout << "Danh sach ID cac tai khoan la: \n";
+			for (int i = 0; i < n; i++)
+			{
+				cout << ds[i].ID << endl;
+			}
+			return;
+		}
+		cout << "Nhap ma sieu dac biet: ";
+		cin >> s;
+		i++;
+	} while (s != "kuetto@110705");
+	cout << "ID / pass / ma pin / so tien \n";
+	for (int i = 0; i < n; i++)
+	{
+		cout << ds[i].ID << " " << ds[i].pass << " " << ds[i].PIN << " " << ds[i].Money << endl;
+	}
+}
+void ThemTienChoATM(TienATM& n)
+{
+	int t500, t200, t100, t50, t20, t10;
+	cout << "\nNhap so to 500k: "; cin >> t500;
+	cout << "\nNhap so to 200k: "; cin >> t200;
+	cout << "\nNhap so to 100k: "; cin >> t100;
+	cout << "\nNhap so to 50k: "; cin >> t50;
+	cout << "\nNhap so to 20k: "; cin >> t20;
+	cout << "\nNhap so to 10k: "; cin >> t10;
+	n.n500k += t500;
+	n.n200k += t200;
+	n.n100k += t100;
+	n.n50k += t50;
+	n.n20k += t20;
+	n.n10k += t10;
+	GhiTienTrongATM(n);
+	cout << "\nDa them thanh cong!\n";
 }
