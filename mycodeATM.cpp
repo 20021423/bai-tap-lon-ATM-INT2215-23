@@ -362,6 +362,7 @@ void LuaChon(ATM& x, TienATM& n, ATM ds[], int sl)
 			else
 			{
 				cout << "\nChuc nang nay danh rieng cho admin. Xin loi quy khach khong the su dung duoc!\n";
+				system("pause");
 				break;
 			}
 			
