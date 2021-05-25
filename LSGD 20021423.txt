@@ -1,0 +1,6 @@
+Thoi gian GD: 23:47:4 25/5/2021
+So tien: +80000 VND
+Quy khach nap 80000VND vao tai khoan cua minh
+Thoi gian GD: 23:48:47 25/5/2021
+So tien: -50000VND
+Quy khach vua chuyen 50000 vao tai khoan co so ID 20021427 phi dich vu 10000

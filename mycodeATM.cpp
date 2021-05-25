@@ -324,8 +324,8 @@ void LuaChon(ATM& x, TienATM& n, ATM ds[], int sl)
 			if (c == 1)
 			{
 				kt = false;
-				break;
 			}
+			break;
 		}
 		case 6:
 		{
