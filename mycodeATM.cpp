@@ -6,6 +6,7 @@
 void menu(ATM ds[], int& n, TienATM& p)
 {
 	bool kt = true;
+
 	do
 	{
 		system("cls");
